@@ -23,8 +23,11 @@ def print_header
 end
 
 def print(students)
-  students.each { |student|
-    puts "#{student[:name]} (#{student[:cohort]} cohort)"
+  # Iterates over hash value inside array to give student name and index value
+  # in the array. Then prints the value +1 to account for cardinal number
+  # counting.
+  students.each_with_index { |student, index|
+    puts "#{index + 1}. #{student[:name]} (#{student[:cohort]} cohort)"
   }
 end
 

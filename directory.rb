@@ -21,14 +21,14 @@ def print_header
   puts "The students of Villians Academy"
   puts "-------------"
 end
-
-def print(students)
-  # Iterates over hash value inside array to give student name and index value
-  # in the array. Then prints the value +1 to account for cardinal number
-  # counting.
-  students.each_with_index { |student, index|
+# Takes an argument to filter students, creating a new array to be iterated
+# over for printing
+def filter(students, initial)
+  specified = students.select { |student|
+    student[:name].start_with?(initial)}
+    specified.each_with_index { |student, index|
     puts "#{index + 1}. #{student[:name]} (#{student[:cohort]} cohort)"
-  }
+    }
 end
 
 def print_footer(names)
@@ -37,5 +37,6 @@ end
 # Nothing happens until we call methods
 students = input_students
 print_header
-print(students)
+#print(students)
+filter(students, "h")
 print_footer(students)

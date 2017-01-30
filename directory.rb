@@ -1,6 +1,6 @@
-puts "The students of Villiants Academy"
+puts "The students of Villians Academy"
 puts "-------------"
-puts "Dr. Hannibam Lecter"
+puts "Dr. Hannibal Lecter"
 puts "Darth Vader"
 puts "Nurse Ratched"
 puts "Michael Corleone"

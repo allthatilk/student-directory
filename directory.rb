@@ -34,7 +34,7 @@ end
 def print_footer(names)
   puts "Overall, we have #{names.count} great students"
 end
-
+# Takes user input to determine the letter to filter students by
 def initial_choice
   puts "Please provide a first initial for us to filter your results: "
   initial = gets.chomp

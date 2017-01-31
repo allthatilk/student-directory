@@ -25,7 +25,7 @@ end
 # over for printing
 def filter(students, initial)
   specified = students.select { |student|
-    student[:name].start_with?(initial)}
+    student[:name].start_with?(initial) && student[:name].length < 12}
   specified.each_with_index { |student, index|
     puts "#{index + 1}. #{student[:name]} (#{student[:cohort]} cohort)"
     }

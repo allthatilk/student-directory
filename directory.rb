@@ -26,9 +26,16 @@ end
 def filter(students, initial)
   specified = students.select { |student|
     student[:name].start_with?(initial) && student[:name].length < 12}
-  specified.each_with_index { |student, index|
-    puts "#{index + 1}. #{student[:name]} (#{student[:cohort]} cohort)"
-    }
+end
+
+def print(results)
+  count = 0
+  while count < results.count
+    results.each_with_index { |student, index|
+      puts "#{index + 1}. #{student[:name]} (#{student[:cohort]} cohort)"
+      }
+    count +=1
+  end
 end
 
 def print_footer(names)
@@ -42,6 +49,6 @@ end
 # Nothing happens until we call methods
 students = input_students
 print_header
-#print(students)
-filter(students, initial_choice)
+results = filter(students, initial_choice)
+print(results)
 print_footer(students)

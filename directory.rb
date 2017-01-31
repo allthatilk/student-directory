@@ -26,7 +26,7 @@ end
 def filter(students, initial)
   specified = students.select { |student|
     student[:name].start_with?(initial)}
-    specified.each_with_index { |student, index|
+  specified.each_with_index { |student, index|
     puts "#{index + 1}. #{student[:name]} (#{student[:cohort]} cohort)"
     }
 end
@@ -34,9 +34,14 @@ end
 def print_footer(names)
   puts "Overall, we have #{names.count} great students"
 end
+
+def initial_choice
+  puts "Please provide a first initial for us to filter your results: "
+  initial = gets.chomp
+end
 # Nothing happens until we call methods
 students = input_students
 print_header
 #print(students)
-filter(students, "h")
+filter(students, initial_choice)
 print_footer(students)

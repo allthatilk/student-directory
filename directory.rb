@@ -18,8 +18,10 @@ def input_students
       height = gets.chomp
       puts "What are they most likely to be remembered for?"
       activity = gets.chomp
+      puts "Which cohort do they belong to?"
+      cohort = gets.chomp
       # Add the student hash to the array
-      students << {name: name, hobbies: hobby, heights: height, most_likely_to: activity, cohort: :november}
+      students << {name: name, hobbies: hobby, heights: height, most_likely_to: activity, cohort: cohort}
       puts "Now we have #{students.count} students"
     end
 

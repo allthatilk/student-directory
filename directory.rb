@@ -31,7 +31,7 @@ def input_students
 end
 
 def print_header
-  puts "The students of Villians Academy"
+  puts "The students of Villains Academy"
   puts "-------------"
 end
 # Takes an argument to filter students, creating a new array to be iterated
@@ -64,7 +64,7 @@ def print_footer(names)
   else
     puts "Overall, we have #{names.count} great students"
   end
-  
+
 end
 # Takes user input to determine the letter to filter students by
 def initial_choice

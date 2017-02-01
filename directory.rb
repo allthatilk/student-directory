@@ -3,17 +3,14 @@ def input_students
   puts "To finish, just hit return twice"
   # Create an empty array
   students = []
-  hobbies = []
-  heights = []
-  most_likely_to = []
-  #cohort = []
+  # Sets name variable to empty for while loop to work
   name = " "
   # While the name is not empty, repeat this code
   while !name.empty? do
   # Get the first name
     puts "Please enter the student's name: "
     name = gets.chomp
-
+    # If a name is entered it loops for more info to add to the student hash
     if name.empty? == false
       puts "Please enter their favourite hobby: "
       hobby = gets.chomp
@@ -48,13 +45,17 @@ end
 # through results to print
 def print(results)
   tally = 0
+
   while tally < results.count
     index = results[tally]
-     puts "#{tally + 1}. #{index[:name]}\n\tFavourite hobby: #{index[:hobbies]}
-     \tHeight: #{index[:heights]}\n\tMost likely to resort to #{index[:most_likely_to]}
-      \t(#{index[:cohort]} cohort)"
+     puts "#{tally + 1}. #{index[:name]}".center(70)
+     puts "Favourite hobby: #{index[:hobbies]}".center(75)
+     puts "Height: #{index[:heights]}".center(75)
+     puts "Most likely to resort to #{index[:most_likely_to]}".center(75)
+     puts "(#{index[:cohort]} cohort)".center(75)
     tally +=1
   end
+
 end
 
 def print_footer(names)

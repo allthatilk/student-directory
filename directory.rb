@@ -32,7 +32,8 @@ end
 def print(results)
   tally = 0
   while tally < results.count
-     puts "#{tally}. #{results[tally][:name]} (#{results[tally][:cohort]} cohort)"
+    index = results[tally]
+     puts "#{tally}. #{index[:name]} (#{index[:cohort]} cohort)"
     tally +=1
   end
 end

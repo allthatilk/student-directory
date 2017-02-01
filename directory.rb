@@ -5,7 +5,7 @@ def input_students
   students = []
   # Sets name variable to empty for while loop to work
   name = " "
-  # While the name is not empty, repeat this code
+  # While the name is empty, repeat this code
   while !name.empty? do
   # Get the first name
     puts "Please enter the student's name: "
@@ -28,9 +28,6 @@ def input_students
   end
   # Return the array of students
   students
-  #hobbies
-  #heights
-  #most_likely_to
 end
 
 def print_header
@@ -61,7 +58,13 @@ def print(results)
 end
 
 def print_footer(names)
-  puts "Overall, we have #{names.count} great students"
+
+  if names.count < 2
+    puts "Overall, we have #{names.count} great student"
+  else
+    puts "Overall, we have #{names.count} great students"
+  end
+  
 end
 # Takes user input to determine the letter to filter students by
 def initial_choice

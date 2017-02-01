@@ -27,7 +27,8 @@ def filter(students, filter_by)
   specified = students.select { |student|
     student[:name].start_with?(filter_by) && student[:name].length < 12}
 end
-
+# Creates a tally and uses that as index for results array values to iterate
+# through results to print
 def print(results)
   tally = 0
   while tally < results.count

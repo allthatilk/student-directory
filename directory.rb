@@ -23,18 +23,16 @@ def print_header
 end
 # Takes an argument to filter students, creating a new array to be iterated
 # over for printing
-def filter(students, initial)
+def filter(students, filter_by)
   specified = students.select { |student|
-    student[:name].start_with?(initial) && student[:name].length < 12}
+    student[:name].start_with?(filter_by) && student[:name].length < 12}
 end
 
 def print(results)
-  count = 0
-  while count < results.count
-    results.each_with_index { |student, index|
-      puts "#{index + 1}. #{student[:name]} (#{student[:cohort]} cohort)"
-      }
-    count +=1
+  tally = 0
+  while tally < results.count
+     puts "#{tally}. #{results[tally][:name]} (#{results[tally][:cohort]} cohort)"
+    tally +=1
   end
 end
 
@@ -44,7 +42,7 @@ end
 # Takes user input to determine the letter to filter students by
 def initial_choice
   puts "Please provide a first initial for us to filter your results: "
-  initial = gets.chomp
+  filter_by = gets.chomp
 end
 # Nothing happens until we call methods
 students = input_students

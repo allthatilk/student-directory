@@ -7,27 +7,31 @@ def input_students
   heights = []
   most_likely_to = []
   #cohort = []
-  # Get the first name
-  puts "Please enter the student's name: "
-  name = gets.chomp
-  puts "Please enter their favourite hobby: "
-  hobby = gets.chomp
-  puts "Please enter their height: "
-  height = gets.chomp
-  puts "What are they most likely to be remembered for?"
-  activity = gets.chomp
+  name = " "
   # While the name is not empty, repeat this code
   while !name.empty? do
-    # Add the student hash to the array
-    #profile <<
-    students << {name: name, hobbies: hobby, heights: height, most_likely_to: activity, cohort: :november}
-    puts "Now we have #{students.count} students"
-    # Get another name from the user
-    puts "Please enter the next student's name: "
+  # Get the first name
+    puts "Please enter the student's name: "
     name = gets.chomp
+
+    if name.empty? == false
+      puts "Please enter their favourite hobby: "
+      hobby = gets.chomp
+      puts "Please enter their height: "
+      height = gets.chomp
+      puts "What are they most likely to be remembered for?"
+      activity = gets.chomp
+      # Add the student hash to the array
+      students << {name: name, hobbies: hobby, heights: height, most_likely_to: activity, cohort: :november}
+      puts "Now we have #{students.count} students"
+    end
+
   end
   # Return the array of students
   students
+  #hobbies
+  #heights
+  #most_likely_to
 end
 
 def print_header
@@ -46,7 +50,9 @@ def print(results)
   tally = 0
   while tally < results.count
     index = results[tally]
-     puts "#{tally}. #{index[:name]}\n\tFavourite pastime: #{index[:hobby]}\n\tHeight: #{index[:height]}\n\tMost Likely to resort to #{index[:most_likely_to]}\n\t(#{index[:cohort]} cohort)"
+     puts "#{tally + 1}. #{index[:name]}\n\tFavourite hobby: #{index[:hobbies]}
+     \tHeight: #{index[:heights]}\n\tMost likely to resort to #{index[:most_likely_to]}
+      \t(#{index[:cohort]} cohort)"
     tally +=1
   end
 end

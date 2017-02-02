@@ -8,9 +8,21 @@ def input_name(name = "J. Doe")
   until name.empty? do
   # Get the first name
     name = gets.chomp
+    unless name.empty? == true
+      puts "You have entered the name #{name}, is this correct? Y/N: "
+      edit = gets.chomp.downcase
+
+        if edit == "y" or edit == "yes"
+          puts "#{name}'s name has been registered."
+        elsif edit == "n" or edit == "no"
+          puts "Please enter the correct name: "
+          name = gets.chomp
+        end
+    end
     # If a name is entered it adds the name has to the students array and counts
     # the number of students entered so far
-    if name.empty? == false
+    case name.empty?
+    when false
       students << {name: name}
       puts "Now we have #{students.count} students"
       puts "You can enter the name of another student or press ENTER to skip"
@@ -26,6 +38,20 @@ def input_cohort(students, cohort = "No")
   students.each do |student|
     puts "Which cohort does #{student[:name]} belong to?"
     cohort = gets.chomp.to_sym
+
+    unless cohort.empty? == true
+      puts "You have entered cohort #{cohort}, is this correct? Y/N: "
+      edit = gets.chomp.downcase
+
+        if edit == "y" or edit == "yes"
+          puts "#{student[:name]} has been registered to the #{cohort} cohort"
+        elsif edit ==  "n" or edit == "no"
+          puts "Please enter the correct cohort: "
+          cohort = gets.chomp
+        end
+
+     end
+
     students.map { |student| student[:cohort] = cohort}
   end
 

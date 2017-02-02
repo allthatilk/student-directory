@@ -7,16 +7,16 @@ def input_name(name = "J. Doe")
   # While the name is not empty, repeat this code
   until name.empty? do
   # Get the first name
-    name = gets.chomp
+    name = gets.strip
     unless name.empty? == true
       puts "You have entered the name #{name}, is this correct? Y/N: "
-      edit = gets.chomp.downcase
+      edit = gets.strip.downcase
 
         if edit == "y" or edit == "yes"
           puts "#{name}'s name has been registered."
         elsif edit == "n" or edit == "no"
           puts "Please enter the correct name: "
-          name = gets.chomp
+          name = gets.strip
         end
     end
     # If a name is entered it adds the name has to the students array and counts
@@ -37,18 +37,18 @@ def input_cohort(students, cohort = "No")
 
   students.each do |student|
     puts "Which cohort does #{student[:name]} belong to?"
-    cohort = gets.chomp.to_sym
+    cohort = gets.strip.to_sym
 
     unless cohort.empty? == true
       puts "You have entered cohort #{cohort}, is this correct? Y/N: "
-      edit = gets.chomp.downcase
+      edit = gets.strip.downcase
 
         if edit == "y" or edit == "yes"
           student[:cohort] = cohort
           puts "#{student[:name]} has been registered to the #{cohort} cohort"
         elsif edit ==  "n" or edit == "no"
           puts "Please enter the correct cohort: "
-          cohort = gets.chomp
+          cohort = gets.strip
         end
 
     end
@@ -62,13 +62,13 @@ def input_student_info(students)
 # Takes input and adds to each student's hash in array
   students.each do |student|
     puts "Please enter #{student[:name]}'s favourite hobby: "
-    hobby = gets.chomp
+    hobby = gets.strip
     student[:hobbies] = hobby
     puts "Please enter #{student[:name]}'s height: "
-    height = gets.chomp
+    height = gets.strip
     student[:heights] = height
     puts "What is #{student[:name]} most likely to be remembered for?"
-    activity = gets.chomp
+    activity = gets.strip
     student[:most_likely_to] = activity
 
     puts "Now we have #{students.count} students"
@@ -105,7 +105,7 @@ end
 
 def print_by_cohort(students)
   puts "Please select the cohort you wish to view: "
-  filter = gets.chomp.to_sym
+  filter = gets.strip.to_sym
 
   students.select { |student|
     student[:cohort] == filter }.each_with_index {|student, index|
@@ -129,7 +129,7 @@ end
 # Takes user input to determine the letter to filter students by
 def initial_choice
   puts "Please provide a first initial for us to filter your results , or press ENTER again to skip: "
-  filter_by = gets.chomp
+  filter_by = gets.strip
 end
 # Nothing happens until we call methods
 students_arr = input_student_info(input_cohort(input_name))

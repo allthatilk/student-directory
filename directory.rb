@@ -150,7 +150,9 @@ end
 
 def print_footer(names)
 
-  if names.count < 2
+  if names.count == 0
+    puts "We have no students at the moment"
+  elsif names.count >0 and names.count < 2
     puts "Overall, we have #{names.count} great student"
   else
     puts "Overall, we have #{names.count} great students"

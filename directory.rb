@@ -1,29 +1,38 @@
 # Refactor notes: inline ifs, improve default values in methods without
 # breaking loops. Very bad code smell with most of the looping and
 # students_arr printing.
+@students = []
 
 def interactive_menu
-  students = []
   loop do
-    puts "1. Input the students"
-    puts "2. Show the students"
-    puts "9. Exit" # 9 because we'll be adding more items
-    selection = gets.chomp
-
-    case selection
-    when "1"
-      students = input_student_info(input_cohort(input_name))
-    when "2"
-      print_header
-      print_students(students)
-      print_footer(students)
-    when "9"
-      exit # This will cause the program to terminate
-    else
-      puts "I don't know what you mean, try again"
-    end
-  # 3. Do what the user has asked
+      print_menu
+    process(gets.chomp)
   end
+end
+
+def print_menu
+  puts "1. Input the students"
+  puts "2. Show the students"
+  puts "9. Exit" # 9 because we'll be adding more items
+end
+
+def process(selection)
+  case selection
+  when "1"
+    input_student_info(input_cohort(input_name))
+  when "2"
+      show_students
+  when "9"
+    exit # This will cause the program to terminate
+  else
+    puts "I don't know what you mean, try again"
+  end
+end
+
+def show_students
+  print_header
+  print_students_list(@students)
+  print_footer(@students)
 end
 
 
@@ -31,7 +40,6 @@ def input_name(name = "J. Doe")
   puts "Please enter the name of the student."
   puts "To finish, just hit return twice."
   # Create an empty array
-  students = []
   # Sets name variable to empty for while loop to work
   # While the name is not empty, repeat this code
   until name.empty? do
@@ -52,19 +60,19 @@ def input_name(name = "J. Doe")
     # the number of students entered so far
     case name.empty?
     when false
-      students << {name: name}
-      puts "Now we have #{students.count} students"
+      @students << {name: name}
+      puts "Now we have #{@students.count} students"
       puts "You can enter the name of another student or press ENTER to skip"
     end
 
   end
   # Return the array of students
-  students
+  @students
 end
 
-def input_cohort(students, cohort = "No")
+def input_cohort(cohort = "No")
 
-  students.each do |student|
+  @students.each do |student|
     puts "Which cohort does #{student[:name]} belong to?"
     cohort = gets.strip.to_sym
 
@@ -84,12 +92,12 @@ def input_cohort(students, cohort = "No")
 
   end
 
-  students
+  @students
 end
 
-def input_student_info(students)
+def input_student_info(*)
 # Takes input and adds to each student's hash in array
-  students.each do |student|
+  @students.each do |student|
     puts "Please enter #{student[:name]}'s favourite hobby: "
     hobby = gets.strip
     student[:hobbies] = hobby
@@ -100,9 +108,9 @@ def input_student_info(students)
     activity = gets.strip
     student[:most_likely_to] = activity
 
-    puts "Now we have #{students.count} students"
+    puts "Now we have #{@students.count} students"
   end
-  students
+  @students
 end
 
 def print_header
@@ -117,7 +125,7 @@ end
 #end
 # Creates a tally and uses that as index for results array values to iterate
 # through results to print
-def print_students(results)
+def print_students_list(results)
   tally = 0
 
   while tally < results.count

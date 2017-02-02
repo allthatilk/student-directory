@@ -6,7 +6,7 @@
 def interactive_menu
   loop do
       print_menu
-    process(gets.chomp)
+    process(STDIN.gets.chomp)
   end
 end
 
@@ -50,16 +50,16 @@ def input_name(name = "J. Doe")
   # While the name is not empty, repeat this code
   until name.empty? do
   # Get the first name
-    name = gets.strip
+    name = STDIN.gets.strip
     unless name.empty? == true
       puts "You have entered the name #{name}, is this correct? Y/N: "
-      edit = gets.strip.downcase
+      edit = STDIN.gets.strip.downcase
 
         if edit == "y" or edit == "yes"
           puts "#{name}'s name has been registered."
         elsif edit == "n" or edit == "no"
           puts "Please enter the correct name: "
-          name = gets.strip
+          name = STDIN.gets.strip
         end
     end
     # If a name is entered it adds the name has to the students array and counts
@@ -80,18 +80,18 @@ def input_cohort(cohort = "No")
 
   @students.each do |student|
     puts "Which cohort does #{student[:name]} belong to?"
-    cohort = gets.strip.to_sym
+    cohort = STDIN.gets.strip.to_sym
 
     unless cohort.empty? == true
       puts "You have entered cohort #{cohort}, is this correct? Y/N: "
-      edit = gets.strip.downcase
+      edit = STDIN.gets.strip.downcase
 
         if edit == "y" or edit == "yes"
           student[:cohort] = cohort
           puts "#{student[:name]} has been registered to the #{cohort} cohort"
         elsif edit ==  "n" or edit == "no"
           puts "Please enter the correct cohort: "
-          cohort = gets.strip
+          cohort = STDIN.gets.strip
         end
 
     end
@@ -105,13 +105,13 @@ def input_student_info(*)
 # Takes input and adds to each student's hash in array
   @students.each do |student|
     puts "Please enter #{student[:name]}'s favourite hobby: "
-    hobby = gets.strip
+    hobby = STDIN.gets.strip
     student[:hobbies] = hobby
     puts "Please enter #{student[:name]}'s height: "
-    height = gets.strip
+    height = STDIN.gets.strip
     student[:heights] = height
     puts "What is #{student[:name]} most likely to be remembered for?"
-    activity = gets.strip
+    activity = STDIN.gets.strip
     student[:most_likely_to] = activity
 
     puts "Now we have #{@students.count} students"
@@ -131,8 +131,20 @@ def save_students
   file.close
 end
 
-def load_students
-  file = File.open("students.csv", "r")
+def try_load_students
+  filename = ARGV.first # First argument from the command line
+  return if filename.nil? # Get out of the method if it isn't given
+  if File.exists?(filename) # If it exists
+    load_students(filename)
+    puts "Loaded #{@students.count} from #{filename}"
+  else # If it doesn't exist
+    puts "Sorry, #{filename} doesn't exist."
+    exit # Quit the program
+  end
+end
+
+def load_students(filename= "students.csv")
+  file = File.open(filename, "r")
   file.readlines.each do |line|
     name, cohort, hobby, height, activity = line.chomp.split(',')
       @students << {name: name, cohort: cohort.to_sym, hobbies: hobby, heights: height, most_likely_to: activity}
@@ -200,6 +212,7 @@ def initial_choice
   filter_by = gets.strip
 end
 # Nothing happens until we call methods
+try_load_students
 interactive_menu
 #students_arr = input_student_info(input_cohort(input_name))
 #print_header

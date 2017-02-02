@@ -1,3 +1,32 @@
+# Refactor notes: inline ifs, improve default values in methods without
+# breaking loops. Very bad code smell with most of the looping and
+# students_arr printing.
+
+def interactive_menu
+  students = []
+  loop do
+    puts "1. Input the students"
+    puts "2. Show the students"
+    puts "9. Exit" # 9 because we'll be adding more items
+    selection = gets.chomp
+
+    case selection
+    when "1"
+      students = input_student_info(input_cohort(input_name))
+    when "2"
+      print_header
+      print_students(students)
+      print_footer(students)
+    when "9"
+      exit # This will cause the program to terminate
+    else
+      puts "I don't know what you mean, try again"
+    end
+  # 3. Do what the user has asked
+  end
+end
+
+
 def input_name(name = "J. Doe")
   puts "Please enter the name of the student."
   puts "To finish, just hit return twice."
@@ -88,34 +117,36 @@ end
 #end
 # Creates a tally and uses that as index for results array values to iterate
 # through results to print
-#def print(results)
-#  tally = 0
+def print_students(results)
+  tally = 0
 
-#  while tally < results.count
-#    index = results[tally]
-#     puts "#{tally + 1}. #{index[:name]}".center(70)
-#     puts "Favourite hobby: #{index[:hobbies]}".center(75)
-#     puts "Height: #{index[:heights]}".center(75)
-#     puts "Most likely to resort to #{index[:most_likely_to]}".center(75)
-#     puts "(#{index[:cohort]} cohort)".center(75)
-#    tally +=1
-#  end
+  while tally < results.count
+    index = results[tally]
+     puts "#{tally + 1}. #{index[:name]}".center(70)
+     puts "Favourite hobby: #{index[:hobbies]}".center(75)
+     puts "Height: #{index[:heights]}".center(75)
+     puts "Most likely to resort to #{index[:most_likely_to]}".center(75)
+     puts "(#{index[:cohort]} cohort)".center(75)
+     puts "\n"
+    tally +=1
+  end
 
-#end
-
-def print_by_cohort(students)
-  puts "Please select the cohort you wish to view: "
-  filter = gets.strip.to_sym
-
-  students.select { |student|
-    student[:cohort] == filter }.each_with_index {|student, index|
-      puts "This is the #{student[:cohort]} cohort: "
-      puts "#{index + 1}. #{student[:name]}".center(70)
-      puts "Favourite hobby: #{student[:hobbies]}".center(75)
-      puts "Height: #{student[:heights]}".center(75)
-      puts "Most likely to resort to #{student[:most_likely_to]}".center(75)
-      }
 end
+
+#def print_by_cohort(students)
+#  puts "Please select the cohort you wish to view: "
+#  filter = gets.strip.to_sym
+
+#  students.select { |student|
+#    student[:cohort] == filter }.each_with_index {|student, index|
+#      puts "This is the #{student[:cohort]} cohort: "
+#      puts "#{index + 1}. #{student[:name]}".center(70)
+#      puts "Favourite hobby: #{student[:hobbies]}".center(75)
+#      puts "Height: #{student[:heights]}".center(75)
+#      puts "Most likely to resort to #{student[:most_likely_to]}".center(75)
+#      puts "\n"
+#      }
+#end
 
 def print_footer(names)
 
@@ -132,9 +163,10 @@ def initial_choice
   filter_by = gets.strip
 end
 # Nothing happens until we call methods
-students_arr = input_student_info(input_cohort(input_name))
-print_header
-print_by_cohort(students_arr)
+interactive_menu
+#students_arr = input_student_info(input_cohort(input_name))
+#print_header
+#print_by_cohort(students_arr)
 #results = filter(students_arr, initial_choice)
-#print(results)
-print_footer(students_arr)
+#print_students(results)
+#print_footer(students_arr)

@@ -8,8 +8,8 @@
 
 def try_load_students
   filename = ARGV.first # First argument from the command line
-  return if filename.nil? # Get out of the method if it isn't given
-  if File.exists?(filename) # If it exists
+  filename = "students.csv" if filename.nil? == true# Get out of the method if it isn't given
+    if File.exists?(filename) # If it exists
     load_students(filename)
     puts "Loaded #{@students.count} from #{filename}"
   else # If it doesn't exist
@@ -180,7 +180,7 @@ def save_students
   puts "All student records saved to file: students.csv"
 end
 
-def load_students(filename= "students.csv")
+def load_students(filename)
   file = File.open(filename, "r")
   file.readlines.each do |line|
     name, cohort, hobby, height, activity = line.chomp.split(',')

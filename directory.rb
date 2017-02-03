@@ -41,40 +41,65 @@ def show_students
   print_footer(@students)
 end
 
-
 def input_name(name = "J. Doe")
-  puts "Please enter the name of the student."
-  puts "To finish, just hit return twice."
+  # Take name as input
+  puts "Please enter the name of the student: "
+  name = STDIN.gets.chomp
+  # Check name is correct
+  puts "You have entered the name #{name}. Is this correct? Y/N: "
+  edit = STDIN.gets.chomp
+  # Give chance to correct (optional)
+  name = yes_no(edit)
+  # Add as hash values to array
+  @students << {name: name}
+  # Use this method inside another with other student input methods to get
+  # a method that inputs and checks one student at a time rather than the
+  # haphazard approach of old code
+end
+
+
+def yes_no(edit)
+ edit.downcase
+  until edit == "y"
+    puts "Please enter the correct value: "
+    value = STDIN.gets.chomp
+    puts "You have entered #{value}. Is this correct? Y/N: "
+    edit = STDIN.gets.chomp.downcase
+  end
+    puts "Your input has been registered."
+    value
+end
+
+#def input_name(name = "J. Doe")
+#  puts "Please enter the name of the student."
+#  puts "To finish, just hit return twice."
   # Create an empty array
   # Sets name variable to empty for while loop to work
   # While the name is not empty, repeat this code
-  until name.empty? do
+#  until name.empty? do
   # Get the first name
-    name = STDIN.gets.strip
-    unless name.empty? == true
-      puts "You have entered the name #{name}, is this correct? Y/N: "
-      edit = STDIN.gets.strip.downcase
+#    name = STDIN.gets.strip
+#    unless name.empty? == true
+#      puts "You have entered the name #{name}, is this correct? Y/N: "
+#      edit = STDIN.gets.strip.downcase
 
-        if edit == "y" or edit == "yes"
-          puts "#{name}'s name has been registered."
-        elsif edit == "n" or edit == "no"
-          puts "Please enter the correct name: "
-          name = STDIN.gets.strip
-        end
-    end
+#        if edit == /[yes]/ #"y" or edit == "yes"
+#          puts "#{name}'s name has been registered."
+#        elsif edit == /[no]/ #"n" or edit == "no"
+#          puts "Please enter the correct name: "
+#          name = STDIN.gets.strip
+#        end
+#    end
     # If a name is entered it adds the name has to the students array and counts
     # the number of students entered so far
-    case name.empty?
-    when false
-      @students << {name: name}
-      puts "Now we have #{@students.count} students"
-      puts "You can enter the name of another student or press ENTER to skip"
-    end
+#    @students << {name: name} if name.empty? == false
+#      puts "Now we have #{@students.count} students"
+#      puts "You can enter the name of another student or press ENTER to skip"
 
-  end
+#  end
   # Return the array of students
-  @students
-end
+#  @students
+#end
 
 def input_cohort(cohort = "No")
 

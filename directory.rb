@@ -1,9 +1,8 @@
 # Refactor notes: used inline if for name input to make different kind of
 # conditional looping. Changed the way the student input methods worked as the
 # loops were unnecessary within method and very unweildy to refactor. Refactored
-# filters to condense the code and simplify the methods. Want to remove input
-# methods from this file into another, then call on file for functionality. Is
-# it worth making a module or class for this?
+# filters to condense the code and simplify the methods. Input methods too
+# similar. Need refactoring.
 
 @students = []
 

@@ -1,8 +1,8 @@
 # Refactor notes: used inline if for name input to make different kind of
 # conditional looping. Changed the way the student input methods worked as the
 # loops were unnecessary within method and very unweildy to refactor. Refactored
-# filters to condense the code and simplify the methods. Input methods too
-# similar. Need refactoring.
+# filters to condense the code and simplify the methods. Refactored input methods
+# a bit but still not happy. Will review.
 
 @students = []
 
@@ -68,12 +68,7 @@ def input_name
   # Take name as input
   puts "Please enter the name of the student: "
   name = STDIN.gets.chomp
-  # Check name is correct
-  puts "You have entered the name #{name}."
-  # Give chance to correct (optional)
-  name = yes_no(name)
-  # Add as hash values to array
-  name = is_it_empty(default, name)
+  checks(default, name)
   @students << {name: name}
   puts "Would you like to add another student? Y/N: "
   another_student = STDIN.gets.chomp.downcase
@@ -87,10 +82,7 @@ def input_cohort
   # Get cohort
   puts "Please enter the cohort for #{student[:name]}: "
   cohort = STDIN.gets.chomp.to_sym
-  # Check cohort correct
-  puts "You have allocated #{student[:name]} to the #{cohort} cohort"
-  cohort = yes_no(cohort).to_sym
-  cohort = is_it_empty(default, cohort)
+  checks(default, cohort).to_sym
   # Add cohort to existing hash in student array
   student[:cohort] = cohort
   end
@@ -101,9 +93,7 @@ def input_student_height
   @students.each do |student|
     puts "Please enter the height of #{student[:name]}: "
     height = STDIN.gets.strip
-    puts "You have entered the height #{height} for student #{student[:name]}"
-    height = yes_no(height)
-    height = is_it_empty(default, height)
+    checks(default, height)
     student[:heights] = height
   end
 end
@@ -113,9 +103,7 @@ def input_student_hobby
   @students.each do |student|
     puts "Please enter the favourite hobby of #{student[:name]}: "
     hobby = STDIN.gets.strip
-    puts "You have entered the hobby #{hobby} for #{student[:name]}"
-    hobby = yes_no(hobby)
-    hobby = is_it_empty(default, hobby)
+    checks(default, hobby)
     student[:hobbies] = hobby
   end
 end
@@ -125,9 +113,7 @@ def input_student_most_likely_to
   @students.each do |student|
     puts "What is #{student[:name]} most likely to be remembered for?"
     activity = STDIN.gets.strip
-    puts "You have entered #{activity} for #{student[:name]}"
-    activity = yes_no(activity)
-    activity = is_it_empty(activity)
+    checks(default, activity)
     student[:most_likely_to] = activity
   end
 end
@@ -148,6 +134,12 @@ end
 def is_it_empty(default, value)
   value = default if value.empty? == true
   value
+end
+
+def checks(default, value)
+  puts "You have entered #{value}"
+  value = yes_no(value)
+  value = is_it_empty(default, value)
 end
 
 def input_all

@@ -44,6 +44,8 @@ def process(selection)
     load_students
   when "5"
     filter_by_name
+  when "6"
+    filter_by_cohort
   when "9"
     exit # This will cause the program to terminate
   else
@@ -185,10 +187,10 @@ end
 # Takes user input to filter students by name, creating a new array of selected
 # students
 def filter_name_input
-  puts "Please provide a first initial for us to filter your results , or press ENTER again to skip: "
-  initial_choice = gets.strip
+  puts "Please provide a first letter for us to filter your results , or press ENTER again to skip: "
+  letter_choice = gets.strip
 specified = @students.select { |student|
-    student[:name].start_with?(initial_choice) && student[:name].length < 12}
+    student[:name].start_with?(letter_choice)} #&& student[:name].length < 12}
     specified
 end
 # Checks to see if the filter output will be empty, outputs default message if
@@ -207,6 +209,23 @@ end
 
 def filter_by_name
   print_filter(filter_name_input)
+end
+
+def filter_cohort_input
+  puts "Please select the cohort you wish to view: "
+  filter = gets.strip.to_sym
+  specified = @students.select { |student|
+    student[:cohort] == filter }
+      specified
+end
+
+def filter_by_cohort
+  print_filter(filter_cohort_input)
+end
+
+def print_header
+  puts "The students of Villains Academy"
+  puts "-------------"
 end
 
 #def input_name(name = "J. Doe")
@@ -282,11 +301,6 @@ end
 #  end
 #  @students
 #end
-
-def print_header
-  puts "The students of Villains Academy"
-  puts "-------------"
-end
 # Takes user input to determine the letter to filter students by
 #def initial_choice
 #  puts "Please provide a first initial for us to filter your results , or press ENTER again to skip: "
@@ -308,21 +322,6 @@ def print_students_list(results)
     tally +=1
   end
 
-end
-
-def print_by_cohort(students)
-  puts "Please select the cohort you wish to view: "
-  filter = gets.strip.to_sym
-
-  students.select { |student|
-    student[:cohort] == filter }.each_with_index {|student, index|
-      puts "This is the #{student[:cohort]} cohort: "
-      puts "#{index + 1}. #{student[:name]}".center(70)
-      puts "Favourite hobby: #{student[:hobbies]}".center(75)
-      puts "Height: #{student[:heights]}".center(75)
-      puts "Most likely to resort to #{student[:most_likely_to]}".center(75)
-      puts "\n"
-      }
 end
 
 def print_footer(names)

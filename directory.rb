@@ -41,7 +41,7 @@ def show_students
   print_footer(@students)
 end
 # Gets student name, checks it's correct, adds name hash to @students array
-def input_name(name = "J. Doe")
+def input_name
   # Take name as input
   puts "Please enter the name of the student: "
   name = STDIN.gets.chomp
@@ -52,11 +52,30 @@ def input_name(name = "J. Doe")
   name = yes_no(edit, name)
   # Add as hash values to array
   @students << {name: name}
+  puts "Would you like to add another student? Y/N: "
+  another_student = STDIN.gets.chomp.downcase
+  input_name if another_student == "y"
   # Use this method inside another with other student input methods to get
   # a method that inputs and checks one student at a time rather than the
   # haphazard approach of old code
 end
 
+def input_cohort
+  # Link cohort to correct student
+  @students.each do |student|
+  # Get cohort
+  puts "Please enter the cohort for #{student[:name]}: "
+  cohort = STDIN.gets.chomp.to_sym
+  # Check cohort correct
+  puts "You have allocated #{student[:name]} to the #{cohort} cohort"
+  puts "Is this correct? Y/N: "
+  edit = STDIN.gets.chomp
+  cohort = yes_no(edit, cohort).to_sym
+  # Add cohort to existing hash in student array
+  student[:cohort] = cohort
+  end
+
+end
 
 def yes_no(edit, value)
  edit.downcase
@@ -101,30 +120,30 @@ end
 #  @students
 #end
 
-def input_cohort(cohort = "No")
+#def input_cohort(cohort = "No")
 
-  @students.each do |student|
-    puts "Which cohort does #{student[:name]} belong to?"
-    cohort = STDIN.gets.strip.to_sym
+#  @students.each do |student|
+#    puts "Which cohort does #{student[:name]} belong to?"
+#    cohort = STDIN.gets.strip.to_sym
 
-    unless cohort.empty? == true
-      puts "You have entered cohort #{cohort}, is this correct? Y/N: "
-      edit = STDIN.gets.strip.downcase
+#    unless cohort.empty? == true
+#      puts "You have entered cohort #{cohort}, is this correct? Y/N: "
+#      edit = STDIN.gets.strip.downcase
 
-        if edit == "y" or edit == "yes"
-          student[:cohort] = cohort
-          puts "#{student[:name]} has been registered to the #{cohort} cohort"
-        elsif edit ==  "n" or edit == "no"
-          puts "Please enter the correct cohort: "
-          cohort = STDIN.gets.strip
-        end
+#        if edit == "y" or edit == "yes"
+#          student[:cohort] = cohort
+#          puts "#{student[:name]} has been registered to the #{cohort} cohort"
+#        elsif edit ==  "n" or edit == "no"
+#          puts "Please enter the correct cohort: "
+#          cohort = STDIN.gets.strip
+#        end
 
-    end
+#    end
 
-  end
+#  end
 
-  @students
-end
+#  @students
+#end
 
 def input_student_info(*)
 # Takes input and adds to each student's hash in array

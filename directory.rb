@@ -74,7 +74,16 @@ def input_cohort
   # Add cohort to existing hash in student array
   student[:cohort] = cohort
   end
+end
 
+def input_student_hobby
+  @students.each do |student|
+    puts "Please enter #{student[:name]}'s favourite hobby: "
+    hobby = STDIN.gets.strip
+    puts "You have entered the hobby #{hobby} for #{student[:name]}"
+    hobby = yes_no(hobby)
+    student[:hobbies] = hobby
+  end
 end
 
 def yes_no(edit, value)

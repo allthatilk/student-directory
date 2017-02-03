@@ -31,7 +31,7 @@ def print_menu
   puts "2. Show the students"
   puts "3. Save the list of students to students.csv"
   puts "4. Load the list of students from students.csv"
-  puts "5. Filter students by name"
+  puts "5. Filter students by first name initial"
   puts "6. Filter by cohort"
   puts "9. Exit"
 end
@@ -39,18 +39,22 @@ end
 def process(selection)
   case selection
   when "1"
-    puts "You have "
+    puts "You have option 1 to input student data."
     input_all
   when "2"
-    puts "You have seles"
-      show_students
+    puts "You have selected option 2 to view all students on record."
+    show_students
   when "3"
-      save_students
+    puts "You have selected option 3 to save current students records."
+    save_students
   when "4"
+    puts "You have selected option 4 to load students records from file."
     load_students
   when "5"
+    puts "You have selected option 5 to filter student records by first initial."
     filter_by_name
   when "6"
+    puts "You have selected option 6 to filter student records by cohort."
     filter_by_cohort
   when "9"
     puts "Thank you for using this directory. Goodbye."
@@ -172,6 +176,7 @@ def save_students
     file.puts csv_line
   end
   file.close
+  puts "All student records saved to file: students.csv"
 end
 
 def load_students(filename= "students.csv")
@@ -181,16 +186,26 @@ def load_students(filename= "students.csv")
       @students << {name: name, cohort: cohort.to_sym, hobbies: hobby, heights: height, most_likely_to: activity}
     end
   file.close
+  puts "Student records have been loaded."
 end
 
 # Takes user input to filter students by name, creating a new array of selected
 # students
-def filter_name_input
-  puts "Please provide a first letter for us to filter your results , or press ENTER again to skip: "
+def filter_by_name
+  puts "Please provide a first name initial for us to filter your results,"
+  puts "or press ENTER to view all students: "
   letter_choice = gets.strip
 specified = @students.select { |student|
     student[:name].start_with?(letter_choice)} #&& student[:name].length < 12}
-    specified
+    print_filter(specified)
+end
+
+def filter_by_cohort
+  puts "Please select the cohort you wish to view: "
+  filter = gets.strip.to_sym
+  specified = @students.select { |student|
+    student[:cohort] == filter }
+      print_filter(specified)
 end
 # Checks to see if the filter output will be empty, outputs default message if
 # filter list is empty, otherwise prints filtered list
@@ -204,22 +219,6 @@ def print_filter(value)
     else
       print_students_list(list)
   end
-end
-
-def filter_by_name
-  print_filter(filter_name_input)
-end
-
-def filter_cohort_input
-  puts "Please select the cohort you wish to view: "
-  filter = gets.strip.to_sym
-  specified = @students.select { |student|
-    student[:cohort] == filter }
-      specified
-end
-
-def filter_by_cohort
-  print_filter(filter_cohort_input)
 end
 
 def print_header

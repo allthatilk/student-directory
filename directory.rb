@@ -27,19 +27,23 @@ def print_menu
   puts "2. Show the students"
   puts "3. Save the list of students to students.csv"
   puts "4. Load the list of students from students.csv"
+  puts "5. Filter students by name"
+  puts "6. Filter by cohort"
   puts "9. Exit" # 9 because we'll be adding more items
 end
 
 def process(selection)
   case selection
   when "1"
-    input_student_info(input_cohort(input_name))
+    input_all
   when "2"
       show_students
   when "3"
       save_students
   when "4"
     load_students
+  when "5"
+    filter_by_student_name
   when "9"
     exit # This will cause the program to terminate
   else
@@ -257,16 +261,32 @@ def print_header
   puts "-------------"
 end
 # Takes user input to determine the letter to filter students by
-def initial_choice
-  puts "Please provide a first initial for us to filter your results , or press ENTER again to skip: "
-  filter_by = gets.strip
-end
+#def initial_choice
+#  puts "Please provide a first initial for us to filter your results , or press ENTER again to skip: "
+#  filter_by = gets.strip
+#end
 # Takes an argument to filter students, creating a new array to be iterated
 # over for printing
-def filter(students_arr, filter_by)
-specified = students_arr.select { |student|
-    student[:name].start_with?(filter_by) && student[:name].length < 12}
+def filter_letter
+  puts "Please provide a first initial for us to filter your results , or press ENTER again to skip: "
+  initial_choice = gets.strip
+specified = @students.select { |student|
+    student[:name].start_with?(initial_choice) && student[:name].length < 12}
+    specified
 end
+
+def filter_by_student_name
+  default = "\nThere are no students to display. Please select another option.\v"
+  list = filter_letter
+  list = is_it_empty(default, list)
+
+    if list == default
+      puts list
+    else
+      print_students_list(list)
+  end
+end
+
 # Creates a tally and uses that as index for results array values to iterate
 # through results to print
 def print_students_list(results)

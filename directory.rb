@@ -78,11 +78,31 @@ end
 
 def input_student_hobby
   @students.each do |student|
-    puts "Please enter #{student[:name]}'s favourite hobby: "
+    puts "Please enter the favourite hobby of #{student[:name]}: "
     hobby = STDIN.gets.strip
     puts "You have entered the hobby #{hobby} for #{student[:name]}"
     hobby = yes_no(hobby)
     student[:hobbies] = hobby
+  end
+end
+
+def input_student_height
+  @students.each do |student|
+    puts "Please enter the height of #{student[:name]}: "
+    height = STDIN.gets.strip
+    puts "You habe entered the height #{height} for student #{student[:name]}"
+    height = yes_no(height)
+    student[:heights] = height
+  end
+end
+
+def input_student_most_likely_to
+  @students.each do |student|
+    puts "What is #{student[:name]} most likely to be remembered for?"
+    activity = STDIN.gets.strip
+    puts "You have entered #{activity} for #{student[:name]}"
+    activity = yes_no(activity)
+    student[:most_likely_to] = activity
   end
 end
 

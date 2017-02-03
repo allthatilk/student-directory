@@ -1,7 +1,19 @@
-# Refactor notes: inline ifs, improve default values in methods without
-# breaking loops. Very bad code smell with most of the looping and
+# Refactor notes: use inline ifs, improve default values in methods without
+# breaking loops. Very bad code smell with most of the looping for input and
 # students_arr printing.
 @students = []
+
+def try_load_students
+  filename = ARGV.first # First argument from the command line
+  return if filename.nil? # Get out of the method if it isn't given
+  if File.exists?(filename) # If it exists
+    load_students(filename)
+    puts "Loaded #{@students.count} from #{filename}"
+  else # If it doesn't exist
+    puts "Sorry, #{filename} doesn't exist."
+    exit # Quit the program
+  end
+end
 
 def interactive_menu
   loop do
@@ -34,23 +46,18 @@ def process(selection)
     puts "I don't know what you mean, try again"
   end
 end
-
-def show_students
-  print_header
-  print_students_list(@students)
-  print_footer(@students)
-end
 # Gets student name, checks it's correct, adds name hash to @students array
 def input_name
+  default = "J. Doe"
   # Take name as input
   puts "Please enter the name of the student: "
   name = STDIN.gets.chomp
   # Check name is correct
-  puts "You have entered the name #{name}. Is this correct? Y/N: "
-  edit = STDIN.gets.chomp
+  puts "You have entered the name #{name}."
   # Give chance to correct (optional)
-  name = yes_no(edit, name)
+  name = yes_no(name)
   # Add as hash values to array
+  name = is_it_empty(default, name)
   @students << {name: name}
   puts "Would you like to add another student? Y/N: "
   another_student = STDIN.gets.chomp.downcase
@@ -58,9 +65,11 @@ def input_name
   # Use this method inside another with other student input methods to get
   # a method that inputs and checks one student at a time rather than the
   # haphazard approach of old code
+  #puts @students
 end
 
 def input_cohort
+  default = "No"
   # Link cohort to correct student
   @students.each do |student|
   # Get cohort
@@ -68,46 +77,56 @@ def input_cohort
   cohort = STDIN.gets.chomp.to_sym
   # Check cohort correct
   puts "You have allocated #{student[:name]} to the #{cohort} cohort"
-  puts "Is this correct? Y/N: "
-  edit = STDIN.gets.chomp
-  cohort = yes_no(edit, cohort).to_sym
+  cohort = yes_no(cohort).to_sym
+  cohort = is_it_empty(default, cohort)
   # Add cohort to existing hash in student array
   student[:cohort] = cohort
   end
+  puts @students
+end
+
+def input_student_height
+  default = "5f4in"
+  @students.each do |student|
+    puts "Please enter the height of #{student[:name]}: "
+    height = STDIN.gets.strip
+    puts "You have entered the height #{height} for student #{student[:name]}"
+    height = yes_no(height)
+    height = is_it_empty(default, height)
+    student[:heights] = height
+  end
+  #puts @students
 end
 
 def input_student_hobby
+  default = "murder"
   @students.each do |student|
     puts "Please enter the favourite hobby of #{student[:name]}: "
     hobby = STDIN.gets.strip
     puts "You have entered the hobby #{hobby} for #{student[:name]}"
     hobby = yes_no(hobby)
+    hobby = is_it_empty(default, hobby)
     student[:hobbies] = hobby
   end
-end
-
-def input_student_height
-  @students.each do |student|
-    puts "Please enter the height of #{student[:name]}: "
-    height = STDIN.gets.strip
-    puts "You habe entered the height #{height} for student #{student[:name]}"
-    height = yes_no(height)
-    student[:heights] = height
-  end
+  #puts @students
 end
 
 def input_student_most_likely_to
+  default = "go to jail"
   @students.each do |student|
     puts "What is #{student[:name]} most likely to be remembered for?"
     activity = STDIN.gets.strip
     puts "You have entered #{activity} for #{student[:name]}"
     activity = yes_no(activity)
+    activity = is_it_empty(activity)
     student[:most_likely_to] = activity
   end
+#  puts @students
 end
 
-def yes_no(edit, value)
- edit.downcase
+def yes_no(value)
+  puts "Is this correct? Y/N: "
+  edit = STDIN.gets.chomp.downcase
   until edit == "y"
     puts "Please enter the correct value: "
     value = STDIN.gets.chomp
@@ -116,6 +135,20 @@ def yes_no(edit, value)
   end
     puts "Your input has been registered."
     value
+end
+
+def is_it_empty(default, value)
+  value = default if value.empty? == true
+  value
+end
+
+def input_all
+  input_name
+  input_cohort
+  input_student_height
+  input_student_hobby
+  input_student_most_likely_to
+  @students
 end
 
 #def input_name(name = "J. Doe")
@@ -174,22 +207,28 @@ end
 #  @students
 #end
 
-def input_student_info(*)
+#def input_student_info(*)
 # Takes input and adds to each student's hash in array
-  @students.each do |student|
-    puts "Please enter #{student[:name]}'s favourite hobby: "
-    hobby = STDIN.gets.strip
-    student[:hobbies] = hobby
-    puts "Please enter #{student[:name]}'s height: "
-    height = STDIN.gets.strip
-    student[:heights] = height
-    puts "What is #{student[:name]} most likely to be remembered for?"
-    activity = STDIN.gets.strip
-    student[:most_likely_to] = activity
+#  @students.each do |student|
+#    puts "Please enter #{student[:name]}'s favourite hobby: "
+#    hobby = STDIN.gets.strip
+#    student[:hobbies] = hobby
+#    puts "Please enter #{student[:name]}'s height: "
+#    height = STDIN.gets.strip
+#    student[:heights] = height
+#    puts "What is #{student[:name]} most likely to be remembered for?"
+#    activity = STDIN.gets.strip
+#    student[:most_likely_to] = activity
 
-    puts "Now we have #{@students.count} students"
-  end
-  @students
+#    puts "Now we have #{@students.count} students"
+#  end
+#  @students
+#end
+
+def show_students
+  print_header
+  print_students_list(@students)
+  print_footer(@students)
 end
 
 def save_students
@@ -202,18 +241,6 @@ def save_students
     file.puts csv_line
   end
   file.close
-end
-
-def try_load_students
-  filename = ARGV.first # First argument from the command line
-  return if filename.nil? # Get out of the method if it isn't given
-  if File.exists?(filename) # If it exists
-    load_students(filename)
-    puts "Loaded #{@students.count} from #{filename}"
-  else # If it doesn't exist
-    puts "Sorry, #{filename} doesn't exist."
-    exit # Quit the program
-  end
 end
 
 def load_students(filename= "students.csv")
@@ -229,12 +256,17 @@ def print_header
   puts "The students of Villains Academy"
   puts "-------------"
 end
+# Takes user input to determine the letter to filter students by
+def initial_choice
+  puts "Please provide a first initial for us to filter your results , or press ENTER again to skip: "
+  filter_by = gets.strip
+end
 # Takes an argument to filter students, creating a new array to be iterated
 # over for printing
-#def filter(students_arr, filter_by)
-#  specified = students_arr.select { |student|
-#    student[:name].start_with?(filter_by) && student[:name].length < 12}
-#end
+def filter(students_arr, filter_by)
+specified = students_arr.select { |student|
+    student[:name].start_with?(filter_by) && student[:name].length < 12}
+end
 # Creates a tally and uses that as index for results array values to iterate
 # through results to print
 def print_students_list(results)
@@ -253,20 +285,20 @@ def print_students_list(results)
 
 end
 
-#def print_by_cohort(students)
-#  puts "Please select the cohort you wish to view: "
-#  filter = gets.strip.to_sym
+def print_by_cohort(students)
+  puts "Please select the cohort you wish to view: "
+  filter = gets.strip.to_sym
 
-#  students.select { |student|
-#    student[:cohort] == filter }.each_with_index {|student, index|
-#      puts "This is the #{student[:cohort]} cohort: "
-#      puts "#{index + 1}. #{student[:name]}".center(70)
-#      puts "Favourite hobby: #{student[:hobbies]}".center(75)
-#      puts "Height: #{student[:heights]}".center(75)
-#      puts "Most likely to resort to #{student[:most_likely_to]}".center(75)
-#      puts "\n"
-#      }
-#end
+  students.select { |student|
+    student[:cohort] == filter }.each_with_index {|student, index|
+      puts "This is the #{student[:cohort]} cohort: "
+      puts "#{index + 1}. #{student[:name]}".center(70)
+      puts "Favourite hobby: #{student[:hobbies]}".center(75)
+      puts "Height: #{student[:heights]}".center(75)
+      puts "Most likely to resort to #{student[:most_likely_to]}".center(75)
+      puts "\n"
+      }
+end
 
 def print_footer(names)
 
@@ -278,11 +310,6 @@ def print_footer(names)
     puts "Overall, we have #{names.count} great students"
   end
 
-end
-# Takes user input to determine the letter to filter students by
-def initial_choice
-  puts "Please provide a first initial for us to filter your results , or press ENTER again to skip: "
-  filter_by = gets.strip
 end
 # Nothing happens until we call methods
 try_load_students

@@ -40,7 +40,7 @@ def show_students
   print_students_list(@students)
   print_footer(@students)
 end
-
+# Gets student name, checks it's correct, adds name hash to @students array
 def input_name(name = "J. Doe")
   # Take name as input
   puts "Please enter the name of the student: "
@@ -49,7 +49,7 @@ def input_name(name = "J. Doe")
   puts "You have entered the name #{name}. Is this correct? Y/N: "
   edit = STDIN.gets.chomp
   # Give chance to correct (optional)
-  name = yes_no(edit)
+  name = yes_no(edit, name)
   # Add as hash values to array
   @students << {name: name}
   # Use this method inside another with other student input methods to get
@@ -58,7 +58,7 @@ def input_name(name = "J. Doe")
 end
 
 
-def yes_no(edit)
+def yes_no(edit, value)
  edit.downcase
   until edit == "y"
     puts "Please enter the correct value: "

@@ -155,6 +155,56 @@ def input_all
   @students
 end
 
+def show_students
+  print_header
+  print_students_list(@students)
+  print_footer(@students)
+end
+
+def save_students
+  # Open the file for writing
+  file = File.open("students.csv", "w")
+  # Iterate ofer the array of students
+  @students.each do |student|
+    student_data = [student[:name], student[:cohort], student[:hobbies], student[:heights], student[:most_likely_to]]
+    csv_line = student_data.join(",")
+    file.puts csv_line
+  end
+  file.close
+end
+
+def load_students(filename= "students.csv")
+  file = File.open(filename, "r")
+  file.readlines.each do |line|
+    name, cohort, hobby, height, activity = line.chomp.split(',')
+      @students << {name: name, cohort: cohort.to_sym, hobbies: hobby, heights: height, most_likely_to: activity}
+    end
+  file.close
+end
+
+# Takes user input to filter students, creating a new array to be iterated
+# over for printing
+def filter_letter
+  puts "Please provide a first initial for us to filter your results , or press ENTER again to skip: "
+  initial_choice = gets.strip
+specified = @students.select { |student|
+    student[:name].start_with?(initial_choice) && student[:name].length < 12}
+    specified
+end
+# Checks to see if the filter output will be empty, outputs default message if
+# filter list is empty, otherwise prints filtered list
+def filter_by_student_name
+  default = "\nThere are no students to display. Please select another option.\v"
+  list = filter_letter
+  list = is_it_empty(default, list)
+
+    if list == default
+      puts list
+    else
+      print_students_list(list)
+  end
+end
+
 #def input_name(name = "J. Doe")
 #  puts "Please enter the name of the student."
 #  puts "To finish, just hit return twice."
@@ -229,33 +279,6 @@ end
 #  @students
 #end
 
-def show_students
-  print_header
-  print_students_list(@students)
-  print_footer(@students)
-end
-
-def save_students
-  # Open the file for writing
-  file = File.open("students.csv", "w")
-  # Iterate ofer the array of students
-  @students.each do |student|
-    student_data = [student[:name], student[:cohort], student[:hobbies], student[:heights], student[:most_likely_to]]
-    csv_line = student_data.join(",")
-    file.puts csv_line
-  end
-  file.close
-end
-
-def load_students(filename= "students.csv")
-  file = File.open(filename, "r")
-  file.readlines.each do |line|
-    name, cohort, hobby, height, activity = line.chomp.split(',')
-      @students << {name: name, cohort: cohort.to_sym, hobbies: hobby, heights: height, most_likely_to: activity}
-    end
-  file.close
-end
-
 def print_header
   puts "The students of Villains Academy"
   puts "-------------"
@@ -265,28 +288,6 @@ end
 #  puts "Please provide a first initial for us to filter your results , or press ENTER again to skip: "
 #  filter_by = gets.strip
 #end
-# Takes an argument to filter students, creating a new array to be iterated
-# over for printing
-def filter_letter
-  puts "Please provide a first initial for us to filter your results , or press ENTER again to skip: "
-  initial_choice = gets.strip
-specified = @students.select { |student|
-    student[:name].start_with?(initial_choice) && student[:name].length < 12}
-    specified
-end
-
-def filter_by_student_name
-  default = "\nThere are no students to display. Please select another option.\v"
-  list = filter_letter
-  list = is_it_empty(default, list)
-
-    if list == default
-      puts list
-    else
-      print_students_list(list)
-  end
-end
-
 # Creates a tally and uses that as index for results array values to iterate
 # through results to print
 def print_students_list(results)

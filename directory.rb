@@ -1,6 +1,10 @@
-# Refactor notes: use inline ifs, improve default values in methods without
-# breaking loops. Very bad code smell with most of the looping for input and
-# students_arr printing.
+# Refactor notes: used inline if for name input to make different kind of
+# conditional looping. Changed the way the student input methods worked as the
+# loops were unnecessary within method and very unweildy to refactor. Refactored
+# filters to condense the code and simplify the methods. Want to remove input
+# methods from this file into another, then call on file for functionality. Is
+# it worth making a module or class for this?
+
 @students = []
 
 def try_load_students
@@ -29,14 +33,16 @@ def print_menu
   puts "4. Load the list of students from students.csv"
   puts "5. Filter students by name"
   puts "6. Filter by cohort"
-  puts "9. Exit" # 9 because we'll be adding more items
+  puts "9. Exit"
 end
 
 def process(selection)
   case selection
   when "1"
+    puts "You have "
     input_all
   when "2"
+    puts "You have seles"
       show_students
   when "3"
       save_students
@@ -47,6 +53,7 @@ def process(selection)
   when "6"
     filter_by_cohort
   when "9"
+    puts "Thank you for using this directory. Goodbye."
     exit # This will cause the program to terminate
   else
     puts "I don't know what you mean, try again"
@@ -68,10 +75,6 @@ def input_name
   puts "Would you like to add another student? Y/N: "
   another_student = STDIN.gets.chomp.downcase
   input_name if another_student == "y"
-  # Use this method inside another with other student input methods to get
-  # a method that inputs and checks one student at a time rather than the
-  # haphazard approach of old code
-  #puts @students
 end
 
 def input_cohort
@@ -88,7 +91,6 @@ def input_cohort
   # Add cohort to existing hash in student array
   student[:cohort] = cohort
   end
-  puts @students
 end
 
 def input_student_height
@@ -101,7 +103,6 @@ def input_student_height
     height = is_it_empty(default, height)
     student[:heights] = height
   end
-  #puts @students
 end
 
 def input_student_hobby
@@ -114,7 +115,6 @@ def input_student_hobby
     hobby = is_it_empty(default, hobby)
     student[:hobbies] = hobby
   end
-  #puts @students
 end
 
 def input_student_most_likely_to
@@ -127,7 +127,6 @@ def input_student_most_likely_to
     activity = is_it_empty(activity)
     student[:most_likely_to] = activity
   end
-#  puts @students
 end
 
 def yes_no(value)
@@ -228,26 +227,18 @@ def print_header
   puts "-------------"
 end
 
-# Creates a tally and uses that as index for results array values to iterate
-# through results to print
-def print_students_list(results)
-  tally = 0
-
-  while tally < results.count
-    index = results[tally]
-     puts "#{tally + 1}. #{index[:name]}".center(70)
-     puts "Favourite hobby: #{index[:hobbies]}".center(75)
-     puts "Height: #{index[:heights]}".center(75)
-     puts "Most likely to resort to #{index[:most_likely_to]}".center(75)
-     puts "(#{index[:cohort]} cohort)".center(75)
-     puts "\n"
-    tally +=1
+def print_students_list(list)
+  list.each_with_index do |student, index|
+    puts "#{index + 1}. #{student[:name]}".center(70)
+    puts "Favourite hobby: #{student[:hobbies]}".center(75)
+    puts "Height: #{student[:heights]}".center(75)
+    puts "Most likely to resort to #{student[:most_likely_to]}".center(75)
+    puts "(#{student[:cohort]} cohort)".center(75)
+    puts "\n"
   end
-
 end
 
 def print_footer(names)
-
   if names.count == 0
     puts "We have no students at the moment"
   elsif names.count >0 and names.count < 2
@@ -255,14 +246,7 @@ def print_footer(names)
   else
     puts "Overall, we have #{names.count} great students"
   end
-
 end
-# Nothing happens until we call methods
+
 try_load_students
 interactive_menu
-#students_arr = input_student_info(input_cohort(input_name))
-#print_header
-#print_by_cohort(students_arr)
-#results = filter(students_arr, initial_choice)
-#print_students(results)
-#print_footer(students_arr)

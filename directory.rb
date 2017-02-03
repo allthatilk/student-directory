@@ -43,7 +43,7 @@ def process(selection)
   when "4"
     load_students
   when "5"
-    filter_by_student_name
+    filter_by_name
   when "9"
     exit # This will cause the program to terminate
   else
@@ -182,9 +182,9 @@ def load_students(filename= "students.csv")
   file.close
 end
 
-# Takes user input to filter students, creating a new array to be iterated
-# over for printing
-def filter_letter
+# Takes user input to filter students by name, creating a new array of selected
+# students
+def filter_name_input
   puts "Please provide a first initial for us to filter your results , or press ENTER again to skip: "
   initial_choice = gets.strip
 specified = @students.select { |student|
@@ -193,9 +193,9 @@ specified = @students.select { |student|
 end
 # Checks to see if the filter output will be empty, outputs default message if
 # filter list is empty, otherwise prints filtered list
-def filter_by_student_name
+def print_filter(value)
   default = "\nThere are no students to display. Please select another option.\v"
-  list = filter_letter
+  list = value
   list = is_it_empty(default, list)
 
     if list == default
@@ -203,6 +203,10 @@ def filter_by_student_name
     else
       print_students_list(list)
   end
+end
+
+def filter_by_name
+  print_filter(filter_name_input)
 end
 
 #def input_name(name = "J. Doe")

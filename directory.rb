@@ -70,9 +70,19 @@ def input_name
   name = STDIN.gets.chomp
   checks(default, name)
   @students << {name: name}
+  another_name
+end
+
+def another_name
   puts "Would you like to add another student? Y/N: "
   another_student = STDIN.gets.chomp.downcase
-  input_name if another_student == "y"
+    if another_student == "y"
+      input_name
+    elsif another_student == "n"
+      # Blank to break the method and continue inputs
+    else
+      another_name
+  end
 end
 
 def input_cohort

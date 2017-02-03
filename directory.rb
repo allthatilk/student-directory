@@ -8,7 +8,7 @@
 
 def try_load_students
   filename = ARGV.first # First argument from the command line
-  filename = "students.csv" if filename.nil? == true# Get out of the method if it isn't given
+  filename = "students.csv" if filename.nil?
     if File.exists?(filename) # If it exists
     load_students(filename)
     puts "Loaded #{@students.count} from #{filename}"
@@ -28,8 +28,8 @@ end
 def print_menu
   puts "1. Input the students"
   puts "2. Show the students"
-  puts "3. Save the list of students to students.csv"
-  puts "4. Load the list of students from students.csv"
+  puts "3. Save the list of students to file"
+  puts "4. Load the list of students from file"
   puts "5. Filter students by first name initial"
   puts "6. Filter by cohort"
   puts "9. Exit"
@@ -48,7 +48,7 @@ def process(selection)
     save_students
   when "4"
     puts "You have selected option 4 to load students records from file."
-    load_students
+    load_from_menu
   when "5"
     puts "You have selected option 5 to filter student records by first initial."
     filter_by_name
@@ -169,7 +169,9 @@ end
 
 def save_students
   # Open the file for writing
-  file = File.open("students.csv", "w")
+  puts "Please enter the name of the save file you wish to create: "
+  filename = STDIN.gets.chomp
+  file = File.open("#{filename}.csv", "w")
   # Iterate ofer the array of students
   @students.each do |student|
     student_data = [student[:name], student[:cohort], student[:hobbies], student[:heights], student[:most_likely_to]]
@@ -177,7 +179,7 @@ def save_students
     file.puts csv_line
   end
   file.close
-  puts "All student records saved to file: students.csv"
+  puts "All student records saved to file: #{filename}.csv"
 end
 
 def load_students(filename)
@@ -187,7 +189,13 @@ def load_students(filename)
       @students << {name: name, cohort: cohort.to_sym, hobbies: hobby, heights: height, most_likely_to: activity}
     end
   file.close
-  puts "Student records have been loaded."
+  puts "Seleceted student records have been loaded."
+end
+
+def load_from_menu
+  puts "Which file do you want to load?"
+  filename = STDIN.gets.chomp
+  load_students(filename)
 end
 
 # Takes user input to filter students by name, creating a new array of selected

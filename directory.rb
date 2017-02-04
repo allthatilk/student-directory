@@ -7,6 +7,7 @@
 # symbol.
 
 @students = []
+require 'csv'
 
 def try_load_students
   filename = ARGV.first # First argument from the command line
@@ -153,18 +154,16 @@ def show_students
 end
 
 def save_students
-  # Open the file for writing
   puts "Please enter the name of the save file you wish to create: "
-  filename = STDIN.gets.chomp
-  File.open("#{filename}.csv", "w") do |file|
-  # Iterate ofer the array of students
-    @students.each do |student|
-      student_data = [student[:name], student[:cohort], student[:hobby], student[:height], student[:key_feature]]
-      csv_line = student_data.join(",")
-      file.puts csv_line
+    filename = STDIN.gets.chomp
+    headers = @students.first.keys
+    CSV.open(filename, "w") do |csv|
+      csv << headers
+        @students.each do |student|
+          csv << student.values
+        end
     end
-  end
-  puts "All student records saved to file: #{filename}.csv"
+    puts "All student records saved to file: #{filename}"
 end
 
 def load_students(filename)

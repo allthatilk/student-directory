@@ -11,12 +11,15 @@
 def try_load_students
   filename = ARGV.first # First argument from the command line
   filename = "students.csv" if filename.nil?
-    if File.exists?(filename) # If it exists
+  check_file(filename)
+end
+
+def check_file(filename)
+  if File.exists?(filename) # If it exists
     load_students(filename)
     puts "Loaded #{@students.count} from #{filename}"
   else # If it doesn't exist
-    puts "Sorry, #{filename} doesn't exist."
-    exit # Quit the program
+    puts "Sorry, the filename #{filename} doesn't exist."
   end
 end
 
@@ -153,31 +156,31 @@ def save_students
   # Open the file for writing
   puts "Please enter the name of the save file you wish to create: "
   filename = STDIN.gets.chomp
-  file = File.open("#{filename}.csv", "w")
+  File.open("#{filename}.csv", "w") do |file|
   # Iterate ofer the array of students
-  @students.each do |student|
-    student_data = [student[:name], student[:cohort], student[:hobby], student[:height], student[:key_feature]]
-    csv_line = student_data.join(",")
-    file.puts csv_line
+    @students.each do |student|
+      student_data = [student[:name], student[:cohort], student[:hobby], student[:height], student[:key_feature]]
+      csv_line = student_data.join(",")
+      file.puts csv_line
+    end
   end
-  file.close
   puts "All student records saved to file: #{filename}.csv"
 end
 
 def load_students(filename)
-  file = File.open(filename, "r")
+  File.open(filename, "r") do |file|
   file.readlines.each do |line|
     name, cohort, hobby, height, activity = line.chomp.split(',')
       @students << {name: name, cohort: cohort.to_sym, hobby: hobby, height: height, key_feature: activity}
     end
-  file.close
+  end
   puts "Seleceted student records have been loaded."
 end
 
 def load_from_menu
   puts "Which file do you want to load?"
   filename = STDIN.gets.chomp
-  load_students(filename)
+  check_file(filename)
 end
 
 # Takes user input to filter students by name, creating a new array of selected

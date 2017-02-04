@@ -2,7 +2,9 @@
 # conditional looping. Changed the way the student input methods worked as the
 # loops were unnecessary within method and very unweildy to refactor. Refactored
 # filters to condense the code and simplify the methods. Refactored input methods
-# a bit but still not happy. Will review.
+# so one method can create multiple key value pairs. Can't replace name or cohort
+# input though due to name creating each student has and cohort value being a
+# symbol.
 
 @students = []
 
@@ -98,33 +100,12 @@ def input_cohort
   end
 end
 
-def input_student_height
-  default = "5f4in"
+def input(key, default)
   @students.each do |student|
-    puts "Please enter the height of #{student[:name]}: "
-    height = STDIN.gets.strip
-    checks(default, height)
-    student[:heights] = height
-  end
-end
-
-def input_student_hobby
-  default = "murder"
-  @students.each do |student|
-    puts "Please enter the favourite hobby of #{student[:name]}: "
-    hobby = STDIN.gets.strip
-    checks(default, hobby)
-    student[:hobbies] = hobby
-  end
-end
-
-def input_student_most_likely_to
-  default = "go to jail"
-  @students.each do |student|
-    puts "What is #{student[:name]} most likely to be remembered for?"
-    activity = STDIN.gets.strip
-    checks(default, activity)
-    student[:most_likely_to] = activity
+    puts "Please provide the #{key} of #{student[:name]}: "
+    value = STDIN.gets.chomp
+    value = checks(default, value)
+    student[key.to_sym] = value
   end
 end
 
@@ -150,15 +131,16 @@ def checks(default, value)
   puts "You have entered #{value}"
   value = yes_no(value)
   value = is_it_empty(default, value)
+  value
 end
 
 def input_all
   input_name
   input_cohort
-  input_student_height
-  input_student_hobby
-  input_student_most_likely_to
-  @students
+  input("height", "5f4in")
+  input("hobby", "murder")
+  input("key_feature", "go to jail")
+  #@students
 end
 
 def show_students
@@ -174,7 +156,7 @@ def save_students
   file = File.open("#{filename}.csv", "w")
   # Iterate ofer the array of students
   @students.each do |student|
-    student_data = [student[:name], student[:cohort], student[:hobbies], student[:heights], student[:most_likely_to]]
+    student_data = [student[:name], student[:cohort], student[:hobby], student[:height], student[:key_feature]]
     csv_line = student_data.join(",")
     file.puts csv_line
   end
@@ -186,7 +168,7 @@ def load_students(filename)
   file = File.open(filename, "r")
   file.readlines.each do |line|
     name, cohort, hobby, height, activity = line.chomp.split(',')
-      @students << {name: name, cohort: cohort.to_sym, hobbies: hobby, heights: height, most_likely_to: activity}
+      @students << {name: name, cohort: cohort.to_sym, hobby: hobby, height: height, key_feature: activity}
     end
   file.close
   puts "Seleceted student records have been loaded."
@@ -238,9 +220,9 @@ end
 def print_students_list(list)
   list.each_with_index do |student, index|
     puts "#{index + 1}. #{student[:name]}".center(70)
-    puts "Favourite hobby: #{student[:hobbies]}".center(75)
-    puts "Height: #{student[:heights]}".center(75)
-    puts "Most likely to resort to #{student[:most_likely_to]}".center(75)
+    puts "Height: #{student[:height]}".center(75)
+    puts "Favourite hobby: #{student[:hobby]}".center(75)
+    puts "Their key feature is #{student[:key_feature]}".center(75)
     puts "(#{student[:cohort]} cohort)".center(75)
     puts "\n"
   end

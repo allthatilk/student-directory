@@ -3,8 +3,10 @@
 # loops were unnecessary within method and very unweildy to refactor. Refactored
 # filters to condense the code and simplify the methods. Refactored input methods
 # so one method can create multiple key value pairs. Can't replace name or cohort
-# input though due to name creating each student has and cohort value being a
-# symbol.
+# input though due to name creating each student hash and cohort value being a
+# symbol. Refactored load and save methods to use CSV library. If I were to do
+# anything more it would be to create a method that skips input for existing
+# students and appends new ones to the load file.
 
 @students = []
 require 'csv'
@@ -18,9 +20,9 @@ end
 def check_file(filename)
   if File.exists?(filename) # If it exists
     load_students(filename)
-    puts "Loaded #{@students.count} from #{filename}"
+    puts "Loaded #{@students.count} from #{filename}\v"
   else # If it doesn't exist
-    puts "Sorry, the filename #{filename} doesn't exist."
+    puts "Sorry, the filename #{filename} doesn't exist.\v"
   end
 end
 
@@ -85,7 +87,7 @@ def another_name
     if another_student == "y"
       input_name
     elsif another_student == "n"
-      # Blank to break the method and continue inputs
+      # Blank to put break the method and continue inputs
     else
       another_name
   end
@@ -144,7 +146,6 @@ def input_all
   input("height", "5f4in")
   input("hobby", "murder")
   input("key_feature", "go to jail")
-  #@students
 end
 
 def show_students
@@ -166,16 +167,6 @@ def save_students
     puts "All student records saved to file: #{filename}"
 end
 
-#def load_students(filename)
-#  File.open(filename, "r") do |file|
-#  file.readlines.each do |line|
-#    name, cohort, hobby, height, activity = line.chomp.split(',')
-#      @students << {name: name, cohort: cohort.to_sym, hobby: hobby, height: height, key_feature: activity}
-#    end
-#  end
-#  puts "Seleceted student records have been loaded."
-#end
-
 def load_students(filename)
   # Assigns all file data to variable, ignores headers in index and converts
   # headers to symbols
@@ -186,7 +177,7 @@ def load_students(filename)
     # Converts each student array to a hash and adds to the @students array
     @students << student.to_h
   end
-  puts "Selected student records have been loaded."
+  puts "Selected student records have been loaded.\v"
 end
 
 def load_from_menu

@@ -166,14 +166,27 @@ def save_students
     puts "All student records saved to file: #{filename}"
 end
 
+#def load_students(filename)
+#  File.open(filename, "r") do |file|
+#  file.readlines.each do |line|
+#    name, cohort, hobby, height, activity = line.chomp.split(',')
+#      @students << {name: name, cohort: cohort.to_sym, hobby: hobby, height: height, key_feature: activity}
+#    end
+#  end
+#  puts "Seleceted student records have been loaded."
+#end
+
 def load_students(filename)
-  File.open(filename, "r") do |file|
-  file.readlines.each do |line|
-    name, cohort, hobby, height, activity = line.chomp.split(',')
-      @students << {name: name, cohort: cohort.to_sym, hobby: hobby, height: height, key_feature: activity}
-    end
+  # Assigns all file data to variable, ignores headers in index and converts
+  # headers to symbols
+  data = CSV.foreach(filename, headers: true, header_converters: :symbol)
+  data.each do |student|
+    # Converts all cohort values to symbols
+    student[:cohort] = student[:cohort].to_sym
+    # Converts each student array to a hash and adds to the @students array
+    @students << student.to_h
   end
-  puts "Seleceted student records have been loaded."
+  puts "Selected student records have been loaded."
 end
 
 def load_from_menu

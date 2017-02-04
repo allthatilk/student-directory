@@ -1,1 +1,2 @@
-puts s = "puts s = \"puts s ="
+s = "\nputs \"s = \" + s.inspect + s"
+puts "s = " + s.inspect + s
